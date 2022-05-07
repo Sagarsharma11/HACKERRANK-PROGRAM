@@ -1,30 +1,70 @@
+import java.io.*;
+import java.math.*;
+import java.security.*;
+import java.text.*;
 import java.util.*;
-public class digonal {
-    public static void main(String[] args) {
-        List<Integer> arr = new ArrayList<>();
+import java.util.concurrent.*;
+import java.util.function.*;
+import java.util.regex.*;
+import java.util.stream.*;
+import java.math.*;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
-        arr.add(11);
-        arr.add(2);
-        arr.add(4);
-        arr.add(4);
-        arr.add(5);
-        arr.add(6);
-        arr.add(10);
-        arr.add(8);
-        arr.add(-12);
+class Result {
 
-        int d1 = arr.get(0)+arr.get(4)+arr.get(8);
-        int d2 = arr.get(2)+arr.get(4)+arr.get(6);
+    /*
+     * Complete the 'diagonalDifference' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts 2D_INTEGER_ARRAY arr as parameter.
+     */
 
-        int diff = 0;
-
-        if(d1>d2)
+    public static int diagonalDifference(List<List<Integer>> arr) {
+    // Write your code here
+        
+        int left = 0;
+        int right= arr.size()-1;
+        int result=0;
+        
+        for(int i = 0; i<arr.size(); i++)
         {
-            diff = d1-d2;
-        }else{
-            diff = d2-d1;
+            result -= arr.get(i).get(left)-arr.get(i).get(right);
+            right--;;
+            left++;
         }
-        System.out.println(diff);
+        return(Math.abs(result));
+    }
 
+}
+
+public class digonal {
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(System.getenv("OUTPUT_PATH")));
+
+        int n = Integer.parseInt(bufferedReader.readLine().trim());
+
+        List<List<Integer>> arr = new ArrayList<>();
+
+        IntStream.range(0, n).forEach(i -> {
+            try {
+                arr.add(
+                    Stream.of(bufferedReader.readLine().replaceAll("\\s+$", "").split(" "))
+                        .map(Integer::parseInt)
+                        .collect(toList())
+                );
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+
+        int result = Result.diagonalDifference(arr);
+
+        bufferedWriter.write(String.valueOf(result));
+        bufferedWriter.newLine();
+
+        bufferedReader.close();
+        bufferedWriter.close();
     }
 }
